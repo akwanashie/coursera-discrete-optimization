@@ -8,6 +8,7 @@ public class GreedySolver {
 
     for (int i = 0; i < weights.length; i++) {
       usedCapacity += weights[i];
+
       if (usedCapacity > maxCapacity) {
         break;
       }
