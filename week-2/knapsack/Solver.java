@@ -42,7 +42,7 @@ public class Solver {
 				System.out.println(solution.title + ": " + solution);
 			}
 		} else {
-			Solution solution = GreedySolver.solve(input.clone());
+			Solution solution = GreedySolverSortedValues.solve(input.clone());
 			System.out.println(solution);
 		}
 	}
