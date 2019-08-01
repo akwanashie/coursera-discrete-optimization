@@ -1,6 +1,4 @@
-import javasolutions.GreedySolver;
-import javasolutions.InputInstance;
-import javasolutions.Solution;
+import javasolutions.*;
 import java.io.*;
 
 /**
@@ -30,7 +28,8 @@ public class Solver {
 			return;
 
 		InputInstance input = InputInstance.fromFile(fileName);
-		Solution solution = GreedySolver.solve(input);
+		// Solution solution = GreedySolver.solve(input);
+		Solution solution = GreedySolverSortedValues.solve(input);
 		System.out.println(solution);
 	}
 
