@@ -3,7 +3,7 @@
 rm -rf target/
 mkdir target/
 
-javac -d target/ Solver.java
+export CLASSPATH=.:./target
 
-export CLASSPATH=./target
+javac -d target/ Solver.java
 python solver.py $1

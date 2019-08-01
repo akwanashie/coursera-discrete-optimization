@@ -20,15 +20,17 @@ public class InputInstance {
     BufferedReader input =  new BufferedReader(new FileReader(fileName));
     try {
         String line = null;
+        int index = 0;
         while ((line = input.readLine()) != null) {
-          if (capacity == -1) {
+          if (index == 0) {
             String[] firstLine = line.split("\\s+");
             capacity = Integer.parseInt(firstLine[1]);
           } else {
             String[] parts = line.split("\\s+");
-            Item item = new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            Item item = new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), index);
             items.add(item);
           }
+          index++;
         }
     }
     finally {
@@ -42,9 +44,11 @@ public class InputInstance {
 class Item {
   public int weight;
   public int value;
+  public int index;
 
-  public Item (int value, int weight) {
+  public Item (int value, int weight, int index) {
     this.weight = weight;
     this.value = value;
+    this.index = index;
   }
 }

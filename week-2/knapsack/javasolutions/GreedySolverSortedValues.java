@@ -18,16 +18,17 @@ public class GreedySolverSortedValues {
     });
 
     for(int i = 0; i < items.size(); i++) {
-      usedCapacity += items.get(i).weight;
+      Item item = items.get(i);
+      usedCapacity += item.weight;
 
       if (usedCapacity > instance.capacity) {
         break;
       }
 
-      cumulatedValue += items.get(i).value;
-      variableValues[i] = 1;
+      cumulatedValue += item.value;
+      variableValues[item.index] = 1;
     }
 
-    return new Solution(cumulatedValue, variableValues, "Greedy");
+    return new Solution(cumulatedValue, variableValues, "GreedySolverSortedValues");
   }
 }

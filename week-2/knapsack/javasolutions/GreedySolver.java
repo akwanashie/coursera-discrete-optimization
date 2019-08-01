@@ -17,6 +17,6 @@ public class GreedySolver {
       variableValues[i] = 1;
     }
 
-    return new Solution(cumulatedValue, variableValues, "Greedy");
+    return new Solution(cumulatedValue, variableValues, "GreedySolver");
   }
 }

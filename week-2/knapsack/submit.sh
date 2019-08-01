@@ -1,4 +1,4 @@
 #! /usr/bin/env bash
 
-export CLASSPATH=./target
+export CLASSPATH=.:./target
 python submit.py

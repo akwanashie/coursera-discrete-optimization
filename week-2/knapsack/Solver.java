@@ -1,4 +1,6 @@
-import javasolutions.*;
+import javasolutions.InputInstance;
+import javasolutions.GreedySolverSortedValues;
+import javasolutions.Solution;
 import java.io.*;
 
 /**
