@@ -13,7 +13,10 @@ public class GreedySolverSortedValues {
     items.sort(new Comparator<Item>() {
       @Override
       public int compare(Item o1, Item o2) {
-        return o1.value - o2.value;
+        double diff = (o2.value / (1.0 * o2.weight)) - (o1.value / (1.0 * o1.weight));
+        if (diff < 0) return -1;
+        else if (diff > 0) return 1;
+        else return 0;
       }
     });
 

@@ -1,7 +1,10 @@
 import javasolutions.InputInstance;
+import javasolutions.GreedySolver;
 import javasolutions.GreedySolverSortedValues;
 import javasolutions.Solution;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class <code>Solver</code> is an implementation of a greedy algorithm to
@@ -26,13 +29,26 @@ public class Solver {
 	 */
 	public static void solve(String[] args) throws IOException {
 		String fileName = getFileName(args);
-		if (fileName == null)
-			return;
+		if (fileName == null) return;
 
 		InputInstance input = InputInstance.fromFile(fileName);
-		// Solution solution = GreedySolver.solve(input);
-		Solution solution = GreedySolverSortedValues.solve(input);
-		System.out.println(solution);
+
+		if (debugEnabled()) {
+			List<Solution> solutions = new ArrayList<Solution>();
+			solutions.add(GreedySolver.solve(input.clone()));
+			solutions.add(GreedySolverSortedValues.solve(input.clone()));
+
+			for (Solution solution: solutions) {
+				System.out.println(solution.title + ": " + solution);
+			}
+		} else {
+			Solution solution = GreedySolver.solve(input.clone());
+			System.out.println(solution);
+		}
+	}
+
+	private static boolean debugEnabled() {
+		return System.getenv("DEBUG") != null && System.getenv("DEBUG").equals("true");
 	}
 
 	private static String getFileName(String[] args) {

@@ -13,6 +13,10 @@ public class InputInstance {
     this.capacity = capacity;
   }
 
+  public InputInstance clone () {
+    return new InputInstance(new ArrayList<Item>(items), capacity);
+  }
+
   public static InputInstance fromFile (String fileName) throws IOException {
     ArrayList<Item> items = new ArrayList<Item>();
     int capacity = -1;
@@ -27,7 +31,7 @@ public class InputInstance {
             capacity = Integer.parseInt(firstLine[1]);
           } else {
             String[] parts = line.split("\\s+");
-            Item item = new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), index);
+            Item item = new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), index - 1);
             items.add(item);
           }
           index++;
