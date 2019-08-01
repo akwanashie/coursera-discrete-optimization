@@ -3,10 +3,12 @@ package javasolutions;
 public class Solution {
   public int optimalValue;
   public int[] variableValues;
+  public String title;
 
-  public Solution (int optimalValue, int[] variableValues) {
+  public Solution (int optimalValue, int[] variableValues, String title) {
     this.optimalValue = optimalValue;
     this.variableValues = variableValues;
+    this.title = title;
   }
 
   public String toString() {
@@ -22,6 +24,6 @@ public class Solution {
   }
 
   public static Solution empty() {
-    return new Solution(0, new int[0]);
+    return new Solution(0, new int[0], "");
   }
 }
