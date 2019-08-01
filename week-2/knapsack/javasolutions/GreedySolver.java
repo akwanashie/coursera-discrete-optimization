@@ -1,19 +1,19 @@
 package javasolutions;
 
 public class GreedySolver {
-  public static Solution solve (int[] values, int[] weights, int maxCapacity) {
+  public static Solution solve (InputInstance instance) {
     int usedCapacity = 0;
-    int[] variableValues = new int[weights.length];
+    int[] variableValues = new int[instance.items.size()];
     int cumulatedValue = 0;
 
-    for (int i = 0; i < weights.length; i++) {
-      usedCapacity += weights[i];
+    for (int i = 0; i < instance.items.size(); i++) {
+      usedCapacity += instance.items.get(i).weight;
 
-      if (usedCapacity > maxCapacity) {
+      if (usedCapacity > instance.capacity) {
         break;
       }
 
-      cumulatedValue += values[i];
+      cumulatedValue += instance.items.get(i).value;
       variableValues[i] = 1;
     }
 
