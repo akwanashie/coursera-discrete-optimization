@@ -1,3 +1,5 @@
+import javasolutions.GreedySolver;
+import javasolutions.Solution;
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -65,27 +67,7 @@ public class Solver {
           weights[i-1] = Integer.parseInt(parts[1]);
         }
 
-        // a trivial greedy algorithm for filling the knapsack
-        // it takes items in-order until the knapsack is full
-        int value = 0;
-        int weight = 0;
-        int[] taken = new int[items];
-
-        for(int i=0; i < items; i++){
-            if(weight + weights[i] <= capacity){
-                taken[i] = 1;
-                value += values[i];
-                weight += weights[i];
-            } else {
-                taken[i] = 0;
-            }
-        }
-        
-        // prepare the solution in the specified output format
-        System.out.println(value+" 0");
-        for(int i=0; i < items; i++){
-            System.out.print(taken[i]+" ");
-        }
-        System.out.println("");        
+        Solution solution = GreedySolver.solve(values, weights, capacity);
+        System.out.println(solution);
     }
 }
