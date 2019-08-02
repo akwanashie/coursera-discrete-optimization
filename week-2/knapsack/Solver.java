@@ -2,7 +2,7 @@ import javasolutions.InputInstance;
 import javasolutions.GreedySolver;
 import javasolutions.GreedySolverSortedValues;
 import javasolutions.Solution;
-import javasolutions.SolutionChecker;
+import javasolutions.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -39,6 +39,11 @@ public class Solver {
 			List<Solution> solutions = new ArrayList<Solution>();
 			solutions.add(GreedySolver.solve(input.clone()));
 			solutions.add(GreedySolverSortedValues.solve(input.clone()));
+			solutions.add(DynamicProgrammingSolver.solve(input.clone()));
+
+			for (Solution solution: solutions) {
+				System.out.println(solution.title + ": " + solution);
+			}
 
 			String outputLine1 = String.format("%-40s %-20s %-20s", "Algorithm", "isCorrect", "OptimalValue");
 			System.out.println(outputLine1);
@@ -48,7 +53,7 @@ public class Solver {
 				String outputLine2 = String.format("%-40s %-20s %-20d", solution.title, isSolutionCorrect, solution.optimalValue);				System.out.println(outputLine2);
 			}
 		} else {
-			Solution solution = GreedySolverSortedValues.solve(input.clone());
+			Solution solution = DynamicProgrammingSolver.solve(input.clone());
 			System.out.println(solution);
 		}
 	}

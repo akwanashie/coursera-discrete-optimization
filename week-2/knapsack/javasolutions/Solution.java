@@ -24,6 +24,6 @@ public class Solution {
   }
 
   public static Solution empty() {
-    return new Solution(0, new int[0], "");
+    return new Solution(0, new int[0], "Empty");
   }
 }

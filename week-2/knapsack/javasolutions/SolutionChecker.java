@@ -9,6 +9,6 @@ public class SolutionChecker {
       totalCapacity += solution.variableValues[i] * input.items.get(i).value;
     }
 
-    return (totalUsedWeight < input.capacity) && (totalCapacity == solution.optimalValue);
+    return (totalUsedWeight <= input.capacity) && (totalCapacity == solution.optimalValue);
   }
 }
