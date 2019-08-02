@@ -1,4 +1,4 @@
-package javasolutions;
+package javasolutions.solution;
 
 public class Solution {
   public int optimalValue;

@@ -1,4 +1,6 @@
-package javasolutions;
+package javasolutions.solution;
+
+import javasolutions.input.InputInstance;
 
 public class SolutionChecker {
   public static boolean isCorrect(Solution solution, InputInstance input) {

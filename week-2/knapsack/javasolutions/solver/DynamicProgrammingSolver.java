@@ -1,9 +1,17 @@
-package javasolutions;
+package javasolutions.solver;
 
 import java.util.List;
+import javasolutions.input.InputInstance;
+import javasolutions.input.Item;
+import javasolutions.solution.Solution;
 
-public class DynamicProgrammingSolver {
-  public static Solution solve (InputInstance instance) {
+public class DynamicProgrammingSolver implements GenericSolver {
+  @Override
+  public Solution solve (InputInstance instance) throws InappropriateSolverError {
+    if (instance.capacity > 100000) {
+      throw new InappropriateSolverError("Capacity " + instance.capacity + " is greater than 1000");
+    }
+
     int[] variableValues = new int[instance.items.size()];
     int cumulatedValue = 0;
     int numberOfVariables = instance.items.size();
@@ -43,7 +51,7 @@ public class DynamicProgrammingSolver {
     return new Solution(cumulatedValue, variableValues, "DynamicProgrammingSolver");
   }
 
-  private static void printGrid (int[][] grid) {
+  private void printGrid (int[][] grid) {
     for (int i = 0; i < grid[0].length; i++) {
       for (int j = 0; j < grid.length; j++) {
         System.out.print(String.format("%-4d", grid[j][i]));

@@ -1,7 +1,12 @@
-package javasolutions;
+package javasolutions.solver;
 
-public class GreedySolver {
-  public static Solution solve (InputInstance instance) {
+import javasolutions.input.InputInstance;
+import javasolutions.solution.Solution;
+import javasolutions.solver.GenericSolver;
+
+public class GreedySolver implements GenericSolver {
+  @Override
+  public Solution solve (InputInstance instance) throws InappropriateSolverError {
     int usedCapacity = 0;
     int[] variableValues = new int[instance.items.size()];
     int cumulatedValue = 0;

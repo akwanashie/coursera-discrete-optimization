@@ -1,7 +1,10 @@
-import javasolutions.InputInstance;
-import javasolutions.GreedySolver;
-import javasolutions.GreedySolverSortedValues;
-import javasolutions.Solution;
+import javasolutions.input.InputInstance;
+import javasolutions.solver.GreedySolver;
+import javasolutions.solver.GreedySolverSortedValues;
+import javasolutions.solver.MultipleSolver;
+import javasolutions.solver.DynamicProgrammingSolver;
+import javasolutions.solution.Solution;
+import javasolutions.solution.SolutionChecker;
 import javasolutions.*;
 
 import java.io.*;
@@ -37,9 +40,9 @@ public class Solver {
 
 		if (debugEnabled()) {
 			List<Solution> solutions = new ArrayList<Solution>();
-			solutions.add(GreedySolver.solve(input.clone()));
-			solutions.add(GreedySolverSortedValues.solve(input.clone()));
-			solutions.add(DynamicProgrammingSolver.solve(input.clone()));
+			solutions.add(new GreedySolver().solve(input.clone()));
+			solutions.add(new GreedySolverSortedValues().solve(input.clone()));
+			solutions.add(new DynamicProgrammingSolver().solve(input.clone()));
 
 			for (Solution solution: solutions) {
 				System.out.println(solution.title + ": " + solution);
@@ -53,7 +56,7 @@ public class Solver {
 				String outputLine2 = String.format("%-40s %-20s %-20d", solution.title, isSolutionCorrect, solution.optimalValue);				System.out.println(outputLine2);
 			}
 		} else {
-			Solution solution = DynamicProgrammingSolver.solve(input.clone());
+			Solution solution = MultipleSolver.solve(input.clone());
 			System.out.println(solution);
 		}
 	}

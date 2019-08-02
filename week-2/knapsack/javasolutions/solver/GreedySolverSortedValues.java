@@ -1,10 +1,15 @@
-package javasolutions;
+package javasolutions.solver;
 
 import java.util.Comparator;
 import java.util.List;
+import javasolutions.input.Item;
+import javasolutions.input.InputInstance;
+import javasolutions.solution.Solution;
+import javasolutions.solver.GenericSolver;
 
-public class GreedySolverSortedValues {
-  public static Solution solve (InputInstance instance) {
+public class GreedySolverSortedValues implements GenericSolver {
+  @Override
+  public Solution solve (InputInstance instance) throws InappropriateSolverError {
     int usedCapacity = 0;
     int cumulatedValue = 0;
     int[] variableValues = new int[instance.items.size()];
