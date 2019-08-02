@@ -9,6 +9,7 @@ import javasolutions.solver.GenericSolver;
 public class MultipleSolver {
   public static Solution solve (InputInstance instance) {
     List<GenericSolver> solvers = new ArrayList<GenericSolver>();
+    solvers.add(new BranchAndBoundSolver());
     solvers.add(new DynamicProgrammingSolver());
     solvers.add(new GreedySolverSortedValues());
     solvers.add(new GreedySolver());

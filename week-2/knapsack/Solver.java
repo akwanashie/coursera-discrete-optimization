@@ -3,10 +3,9 @@ import javasolutions.solver.GreedySolver;
 import javasolutions.solver.GreedySolverSortedValues;
 import javasolutions.solver.MultipleSolver;
 import javasolutions.solver.DynamicProgrammingSolver;
+import javasolutions.solver.BranchAndBoundSolver;
 import javasolutions.solution.Solution;
 import javasolutions.solution.SolutionChecker;
-import javasolutions.*;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +42,7 @@ public class Solver {
 			solutions.add(new GreedySolver().solve(input.clone()));
 			solutions.add(new GreedySolverSortedValues().solve(input.clone()));
 			solutions.add(new DynamicProgrammingSolver().solve(input.clone()));
+			solutions.add(new BranchAndBoundSolver().solve(input.clone()));
 
 			for (Solution solution: solutions) {
 				System.out.println(solution.title + ": " + solution);
