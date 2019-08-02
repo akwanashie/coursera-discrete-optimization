@@ -4,7 +4,10 @@ rm -rf target/
 mkdir target/
 
 export CLASSPATH=.:./target
-export DEBUG=true
+
+if [ "$2" = "--debug" ]; then
+  export DEBUG=true
+fi
 
 javac -d target/ Solver.java
 
