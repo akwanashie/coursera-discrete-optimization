@@ -2,6 +2,7 @@ package javasolutions.solver;
 
 import javasolutions.solution.Solution;
 import javasolutions.input.InputInstance;
+import javasolutions.input.Item;
 
 public class BranchAndBoundSolver implements GenericSolver {
   private Node currentBest;
@@ -9,113 +10,89 @@ public class BranchAndBoundSolver implements GenericSolver {
   private int MAX_ITERATIONS = 10000000;
 
   public Solution solve (InputInstance instance) {
-    Node rootNode = Node.create(instance.items.size());
+    Node rootNode = Node.create(instance);
     this.currentBest = rootNode;
-    Node bestNode = search(rootNode, instance);
-    int bestNodeValue = nodeCost(bestNode, instance);
-    return new Solution(bestNodeValue, bestNode.getVariableValues(), "BranchAndBoundSolver");
+
+    Node bestNode = search(rootNode);
+    return new Solution(bestNode.totalCost(), bestNode.instance.values(), "BranchAndBoundSolver");
   }
 
-  private Node search (Node node, InputInstance instance) {
+  private boolean iterationsComplete () {
+    return this.currentIterations >= this.MAX_ITERATIONS;
+  }
+
+  private Node search (Node node) {
     this.currentIterations++;
-    if (node.isEdge() ||
-        maxValueIfCapacityIsRelaxed(node, instance) < nodeCost(this.currentBest, instance) ||
-        this.currentIterations >= this.MAX_ITERATIONS) {
+    if (node.isEdge() || node.capacityRelaxation() < currentBest.totalCost() || iterationsComplete()) {
       return node;
     } else {
-      Node leftBranchNode = Node.branch(node, 0);
-      Node leftBranchEdge = search(leftBranchNode, instance);
+      Node leftBranchNode = node.branch(0);
+      Node leftBranchEdge = search(leftBranchNode);
 
-      Node rightBranchNode = Node.branch(node, 1);
+      Node rightBranchNode = node.branch(1);
       Node rightBranchEdge = null;
-      if (nodeWeight(rightBranchNode, instance) > instance.capacity) {
-        rightBranchEdge = Node.toEdge(node);
+      if (rightBranchNode.totalWeight() > node.instance.capacity) {
+        rightBranchEdge = node.toEdge();
       } else {
-        rightBranchEdge = search(rightBranchNode, instance);
+        rightBranchEdge = search(rightBranchNode);
       }
 
-      Node betterNode = nodeCost(leftBranchEdge, instance) > nodeCost(rightBranchEdge, instance) ? leftBranchEdge : rightBranchEdge;
-      this.currentBest = nodeCost(betterNode, instance) > nodeCost(this.currentBest, instance) ? betterNode : this.currentBest;
+      Node betterNode = leftBranchEdge.totalCost() > rightBranchEdge.totalCost() ? leftBranchEdge : rightBranchEdge;
+      this.currentBest = betterNode.totalCost() > this.currentBest.totalCost() ? betterNode : this.currentBest;
       return betterNode;
     }
-  }
-
-  private int nodeCost (Node node, InputInstance instance) {
-    int totalCost = 0;
-    int[] variableValues = node.getVariableValues();
-    for (int i = 0; i <= node.getLevel(); i++) {
-      totalCost += variableValues[i] * instance.items.get(i).cost;
-    }
-    return totalCost;
-  }
-
-  private int nodeWeight (Node node, InputInstance instance) {
-    int totalWeight = 0;
-    int[] variableValues = node.getVariableValues();
-    for (int i = 0; i <= node.getLevel(); i++) {
-      totalWeight += variableValues[i] * instance.items.get(i).weight;
-    }
-    return totalWeight;
-  }
-
-  private int maxValueIfCapacityIsRelaxed (Node node, InputInstance instance) {
-    int[] variableValues = node.getVariableValues().clone();
-    for (int i = node.getLevel() + 1; i < variableValues.length; i++) {
-      variableValues[i] = 1;
-    }
-    return nodeCost(new Node(variableValues, variableValues.length - 1, null), instance);
   }
 }
 
 class Node {
-  private int[] variableValues;
+  public InputInstance instance;
   private int level;
-  private Node parent;
 
-  public Node (int[] variableValues, int level, Node parent) {
-    this.variableValues = variableValues;
+  public Node (InputInstance instance, int level) {
+    this.instance = instance;
     this.level = level;
-    this.parent = parent;
-  }
-
-  public int[] getVariableValues () {
-    return this.variableValues;
-  }
-
-  public int getLevel () {
-    return this.level;
-  }
-
-  public Node getParent () {
-    return this.parent;
   }
 
   public boolean isEdge () {
-    return this.level == this.variableValues.length - 1;
+    return this.level == this.instance.size() - 1;
   }
 
-  public static Node create (int numberOfVariables) {
-    int[] variableValues = new int[numberOfVariables];
-    for (int i = 0; i < numberOfVariables; i++) {
-      variableValues[i] = -1;
+  public Node toEdge () {
+    return new Node(this.instance.clone(), this.instance.size() - 1);
+  }
+
+  public Node branch (int value) {
+    InputInstance clonedInstance = this.instance.clone();
+    int level = this.level + 1;
+    clonedInstance.items.get(level).value = value;
+    return new Node(clonedInstance, level);
+  }
+
+  public int totalCost () {
+    int totalCost = 0;
+    for (Item item : this.instance.items) {
+      totalCost += item.value * item.cost;
     }
-    return new Node(variableValues, -1, null);
+    return totalCost;
   }
 
-  public static Node branch (Node node, int value) {
-    int[] variableValues = node.getVariableValues().clone();
-    int level = node.getLevel() + 1;
-    variableValues[level] = value;
-    return new Node(variableValues, level, node);
-  }
-
-  public static Node toEdge (Node node) {
-    int[] variableValues = node.getVariableValues().clone();
-    for (int i = 0; i < variableValues.length; i++) {
-      if (variableValues[i] == -1) {
-        variableValues[i] = 0;
-      }
+  public int totalWeight () {
+    int totalWeight = 0;
+    for (Item item : this.instance.items) {
+      totalWeight += item.value * item.weight;
     }
-    return new Node(variableValues, variableValues.length - 1, node);
+    return totalWeight;
+  }
+
+  public int capacityRelaxation () {
+    InputInstance clonedInstance = this.instance.clone();
+    for (int i = this.level + 1; i < this.instance.size(); i++) {
+      clonedInstance.items.get(i).value = 1;
+    }
+    return new Node(clonedInstance, clonedInstance.size()).totalCost();
+  }
+
+  public static Node create (InputInstance instance) {
+    return new Node(instance.clone(), -1);
   }
 }

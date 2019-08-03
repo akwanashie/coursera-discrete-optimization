@@ -14,7 +14,23 @@ public class InputInstance {
   }
 
   public InputInstance clone () {
-    return new InputInstance(new ArrayList<Item>(items), capacity);
+    List<Item> clonedItems = new ArrayList<Item>();
+    for (Item item : this.items) {
+      clonedItems.add(item.clone());
+    }
+    return new InputInstance(clonedItems, capacity);
+  }
+
+  public int size () {
+    return this.items.size();
+  }
+
+  public int[] values () {
+    int[] values = new int[this.items.size()];
+    for (Item item : items) {
+      values[item.index] = item.value;
+    }
+    return values;
   }
 
   public static InputInstance fromFile (String fileName) throws IOException {
@@ -31,7 +47,7 @@ public class InputInstance {
             capacity = Integer.parseInt(firstLine[1]);
           } else {
             String[] parts = line.split("\\s+");
-            Item item = new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), index - 1);
+            Item item = new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), index - 1, 0);
             items.add(item);
           }
           index++;
