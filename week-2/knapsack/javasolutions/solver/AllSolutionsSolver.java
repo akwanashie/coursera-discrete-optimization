@@ -6,20 +6,21 @@ import javasolutions.input.InputInstance;
 import javasolutions.solution.Solution;
 import javasolutions.solver.GenericSolver;
 
-public class MultipleSolver {
-  public static Solution solve (InputInstance instance) {
+public class AllSolutionsSolver {
+  public static List<Solution> solve (InputInstance instance) {
     List<GenericSolver> solvers = new ArrayList<GenericSolver>();
     solvers.add(new BranchAndBoundSolver());
     solvers.add(new DynamicProgrammingSolver());
     solvers.add(new GreedySolverSortedValues());
     solvers.add(new GreedySolver());
 
+    List<Solution> solutions = new ArrayList<Solution>();
     for (GenericSolver solver : solvers) {
       try {
-        return solver.solve(instance.clone());
+        solutions.add(solver.solve(instance.clone()));
       } catch (Error ex) { }
     }
 
-    return Solution.empty();
+    return solutions;
   }
 }
