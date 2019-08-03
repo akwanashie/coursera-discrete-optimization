@@ -13,7 +13,7 @@ public class DynamicProgrammingSolver implements GenericSolver {
     }
 
     int[] variableValues = new int[instance.items.size()];
-    int cumulatedValue = 0;
+    int cumulatedCost = 0;
     int numberOfVariables = instance.items.size();
     List<Item> items = instance.items;
     int[][] grid = new int[numberOfVariables + 1][instance.capacity + 1];
@@ -21,19 +21,19 @@ public class DynamicProgrammingSolver implements GenericSolver {
     for (int i = 1; i < grid.length; i++) {
       for (int j = 1; j < grid[i].length; j++) {
         Item currentItem =  items.get(i - 1);
-        int previousValue = grid[i - 1][j];
+        int previousCost = grid[i - 1][j];
 
         if (j < currentItem.weight) {
-          grid[i][j] = previousValue;
+          grid[i][j] = previousCost;
         } else {
           int leftOverCapacity = j - currentItem.weight;
           int leftOverValue = grid[i-1][leftOverCapacity];
-          int addedValue = currentItem.value + leftOverValue;
+          int addedCost = currentItem.cost + leftOverValue;
 
-          if (addedValue > previousValue) {
-            grid[i][j] = addedValue;
+          if (addedCost > previousCost) {
+            grid[i][j] = addedCost;
           } else {
-            grid[i][j] = previousValue;
+            grid[i][j] = previousCost;
           }
         }
       }
@@ -43,12 +43,12 @@ public class DynamicProgrammingSolver implements GenericSolver {
     for (int i = grid.length - 1; i > 0; i--) {
       if (grid[i][j] > grid[i-1][j]) {
         variableValues[i - 1] = 1;
-        cumulatedValue += items.get(i - 1).value;
+        cumulatedCost += items.get(i - 1).cost;
         j -= items.get(i - 1).weight;
       }
     }
 
-    return new Solution(cumulatedValue, variableValues, "DynamicProgrammingSolver");
+    return new Solution(cumulatedCost, variableValues, "DynamicProgrammingSolver");
   }
 
   private void printGrid (int[][] grid) {

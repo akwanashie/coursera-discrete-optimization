@@ -9,7 +9,7 @@ public class GreedySolver implements GenericSolver {
   public Solution solve (InputInstance instance) throws InappropriateSolverError {
     int usedCapacity = 0;
     int[] variableValues = new int[instance.items.size()];
-    int cumulatedValue = 0;
+    int cumulatedCost = 0;
 
     for (int i = 0; i < instance.items.size(); i++) {
       usedCapacity += instance.items.get(i).weight;
@@ -18,10 +18,10 @@ public class GreedySolver implements GenericSolver {
         break;
       }
 
-      cumulatedValue += instance.items.get(i).value;
+      cumulatedCost += instance.items.get(i).cost;
       variableValues[i] = 1;
     }
 
-    return new Solution(cumulatedValue, variableValues, "GreedySolver");
+    return new Solution(cumulatedCost, variableValues, "GreedySolver");
   }
 }
