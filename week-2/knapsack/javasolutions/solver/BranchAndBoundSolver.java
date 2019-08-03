@@ -4,15 +4,23 @@ import javasolutions.solution.Solution;
 import javasolutions.input.InputInstance;
 
 public class BranchAndBoundSolver implements GenericSolver {
+  private Node currentBest;
+  private int currentIterations = 0;
+  private int MAX_ITERATIONS = 10000000;
+
   public Solution solve (InputInstance instance) {
     Node rootNode = Node.create(instance.items.size());
+    this.currentBest = rootNode;
     Node bestNode = search(rootNode, instance);
     int bestNodeValue = nodeValue(bestNode, instance);
     return new Solution(bestNodeValue, bestNode.getVariableValues(), "BranchAndBoundSolver");
   }
 
   private Node search (Node node, InputInstance instance) {
-    if (node.isEdge()) {
+    this.currentIterations++;
+    if (node.isEdge() ||
+        maxValueIfCapacityIsRelaxed(node, instance) < nodeValue(this.currentBest, instance) ||
+        this.currentIterations >= this.MAX_ITERATIONS) {
       return node;
     } else {
       Node leftBranchNode = Node.branch(node, 0);
@@ -26,26 +34,36 @@ public class BranchAndBoundSolver implements GenericSolver {
         rightBranchEdge = search(rightBranchNode, instance);
       }
 
-      return nodeValue(leftBranchEdge, instance) > nodeValue(rightBranchEdge, instance) ? leftBranchEdge : rightBranchEdge;
+      Node betterNode = nodeValue(leftBranchEdge, instance) > nodeValue(rightBranchEdge, instance) ? leftBranchEdge : rightBranchEdge;
+      this.currentBest = nodeValue(betterNode, instance) > nodeValue(this.currentBest, instance) ? betterNode : this.currentBest;
+      return betterNode;
     }
   }
 
   private int nodeValue (Node node, InputInstance instance) {
     int totalValue = 0;
-    int[] nodeVariables = node.getVariableValues();
+    int[] variableValues = node.getVariableValues();
     for (int i = 0; i <= node.getLevel(); i++) {
-      totalValue += nodeVariables[i] * instance.items.get(i).value;
+      totalValue += variableValues[i] * instance.items.get(i).value;
     }
     return totalValue;
   }
 
   private int nodeWeight (Node node, InputInstance instance) {
     int totalWeight = 0;
-    int[] nodeVariables = node.getVariableValues();
+    int[] variableValues = node.getVariableValues();
     for (int i = 0; i <= node.getLevel(); i++) {
-      totalWeight += nodeVariables[i] * instance.items.get(i).weight;
+      totalWeight += variableValues[i] * instance.items.get(i).weight;
     }
     return totalWeight;
+  }
+
+  private int maxValueIfCapacityIsRelaxed (Node node, InputInstance instance) {
+    int[] variableValues = node.getVariableValues().clone();
+    for (int i = node.getLevel() + 1; i < variableValues.length; i++) {
+      variableValues[i] = 1;
+    }
+    return nodeValue(new Node(variableValues, variableValues.length - 1, null), instance);
   }
 }
 

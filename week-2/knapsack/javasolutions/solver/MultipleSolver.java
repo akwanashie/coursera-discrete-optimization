@@ -17,7 +17,7 @@ public class MultipleSolver {
     for (GenericSolver solver : solvers) {
       try {
         return solver.solve(instance.clone());
-      } catch (InappropriateSolverError ex) { }
+      } catch (Error ex) { }
     }
 
     return Solution.empty();
